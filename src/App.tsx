@@ -35,6 +35,11 @@ function App() {
 
   const [updateTodo, { error: updateError }] = useMutation(UPDATE_TODO);
 
+  const sort = (list: IList[]): IList[] => {
+    const newList = [...list];
+    return newList.sort((a, b) => +a.checked - +b.checked);
+  };
+
   const counter = (): string => {
     if (data?.allTodos as IList[]) {
       const completed = data.allTodos.filter((todo: IList) => todo.checked);
@@ -82,7 +87,9 @@ function App() {
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <ul>{data && data.allTodos.map((item: IList) => <TodoItem handleUpdate={updateTodo} handleRemove={removeTodo} key={item.id} item={item} />)}</ul>
+          <ul>
+            {data && sort(data.allTodos).map((item: IList) => <TodoItem handleUpdate={updateTodo} handleRemove={removeTodo} key={item.id} item={item} />)}
+          </ul>
         )}
       </div>
     </div>
