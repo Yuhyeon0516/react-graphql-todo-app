@@ -1,6 +1,6 @@
 import "./App.css";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_TODO, GET_TODOS, REMOVE_TODO } from "./apollo/todos";
+import { ADD_TODO, GET_TODOS, REMOVE_TODO, UPDATE_TODO } from "./apollo/todos";
 import TodoItem from "./components/TodoItem";
 import { AllTodosCache, IList } from "./types";
 import React, { useState } from "react";
@@ -32,6 +32,8 @@ function App() {
       });
     },
   });
+
+  const [updateTodo, { error: updateError }] = useMutation(UPDATE_TODO);
 
   const counter = (): string => {
     if (data?.allTodos as IList[]) {
@@ -80,7 +82,7 @@ function App() {
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <ul>{data && data.allTodos.map((item: IList) => <TodoItem handleRemove={removeTodo} key={item.id} item={item} />)}</ul>
+          <ul>{data && data.allTodos.map((item: IList) => <TodoItem handleUpdate={updateTodo} handleRemove={removeTodo} key={item.id} item={item} />)}</ul>
         )}
       </div>
     </div>
